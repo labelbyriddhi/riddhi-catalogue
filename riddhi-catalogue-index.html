@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RIDDHI Collections | Kurti Catalogue</title>
+
+  <style>
+* {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background: #f7f5f2;
+      color: #222;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 10px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .brand {
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .brand-logo {
+      width: 260px;
+      max-width: 70%;
+      height: auto;
+      display: block;
+      margin: 0 auto 8px;
+    }
+
+    .subtitle {
+      color: #777;
+      font-size: 13px;
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    .search {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      font-size: 14px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      margin: 8px 0;
+      padding-bottom: 3px;
+    }
+
+    .filter {
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 8px;
+      padding: 8px 10px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .filter.active {
+      background: #222;
+      color: white;
+    }
+
+    /*
+       IMPORTANT:
+       4 products per row on mobile
+       4 products per row on desktop
+    */
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .product {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .product-image {
+      width: 100%;
+      aspect-ratio: 1 / 1.2;
+      object-fit: cover;
+      background: #eee;
+      display: block;
+    }
+
+    .product-info {
+      padding: 6px;
+    }
+
+    .code {
+      font-size: 8px;
+      color: #888;
+    }
+
+    .name {
+      font-size: 11px;
+      font-weight: bold;
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+
+    .colour {
+      font-size: 8px;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    .sizes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 5px;
+    }
+
+    .size {
+      text-align: center;
+      padding: 3px 1px;
+      border-radius: 4px;
+      font-size: 7px;
+      font-weight: bold;
+    }
+
+    .available {
+      background: #e5f6ed;
+      color: #08733d;
+    }
+
+    /* SELECTED AVAILABLE SIZE */
+  .size.available.selected {
+  outline: 3px solid #198754;
+  outline-offset: -3px;
+  font-weight: 700;
+}
+
+    .sold {
+      background: #fae8e8;
+      color: #b42f2f;
+    }
+
+    .whatsapp {
+      display: block;
+      text-align: center;
+      background: #16834b;
+      color: white;
+      text-decoration: none;
+      padding: 5px 2px;
+      border-radius: 6px;
+      margin-top: 5px;
+      font-size: 8px;
+      font-weight: bold;
+    }
+
+    .size-warning {
+  color: #c62828;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin: 6px 0;
+}
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 10px;
+      color: #777;
+    }
+
+    .edit-button {
+      display: block;
+      margin: 8px 0;
+      margin-left: auto;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: #eee;
+      cursor: pointer;
+    }
+
+    .admin {
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .admin input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 13px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #222;
+      color: white;
+    }
+
+    .green {
+      background: #16834b;
+      color: white;
+    }
+
+    .red {
+      background: #c43b3b;
+      color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .size-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .size-option {
+      border: 1px solid #ddd;
+      padding: 8px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .admin-product {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .admin-product img {
+      width: 45px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .admin-product-info {
+      flex: 1;
+      font-size: 11px;
+    }
+
+@media screen and (max-width: 1000px) {
+
+  /* ===== MOBILE LAYOUT — MATCH SAFARI REFERENCE ===== */
+
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+.brand-logo {
+  width: 520px;
+  max-width: 92%;
+  height: auto;
+  display: block;
+  margin: 0 auto 28px;
+}
+
+.subtitle {
+  font-size: 31px;
+  line-height: 1.25;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 24px;
+  padding: 22px 24px;
+  min-height: 78px;
+  border-radius: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  margin: 18px 0 20px;
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+
+.filter {
+  flex: 0 0 auto;
+  font-size: 24px;
+  padding: 14px 20px;
+  min-height: 54px;
+  border-radius: 14px;
+}
+
+  .products {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .product {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1.20;
+    object-fit: cover;
+  }
+
+.product-info {
+  padding: 12px;
+}
+
+.code {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.name {
+  font-size: 28px;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.colour {
+  font-size: 23px;
+  margin-top: 4px;
+}
+
+.sizes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.size {
+  font-size: 25px;
+  padding: 12px 3px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.whatsapp {
+  width: 100%;
+  font-size: 28px;
+  padding: 15px 5px;
+  min-height: 60px;
+  border-radius: 8px;
+}
+}
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<img
+  id="brandLogo"
+  class="brand-logo"
+  alt="RIDDHI"
+>
+
+</div>
+
+
+<div class="subtitle">
+    Browse designs & check availability
+</div>
+
+
+
+
+
+  <input
+    id="search"
+    class="search"
+    placeholder="🔎 Search design, code or colour"
+    oninput="displayProducts()"
+  >
+
+  <div id="filters" class="filters"></div>
+
+  <div id="count"
+       style="font-size:32px;color:#888;margin:7px 0">
+  </div>
+
+  <div id="products"
+       class="products">
+  </div>
+
+</div>
+
+<script>
+const SIZE_LIST = [
+  "S",
+  "M",
+  "L",
+  "XL",
+  "2XL",
+  "3XL",
+  "4XL",
+  "5XL"
+];
+
+let products = [];
+let selectedSize = "";
+let adminPin = "";
+let editingId = "";
+let uploadedPhotoUrl = "";
+
+
+/* LOAD PRODUCTS FROM APPS SCRIPT API */
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxkEggaj9_CzimoqhdA12Wt_HW72J_BrHTeSGle87kzUUBDhFXtgdsWycHCL2kCc1u_fg/exec";
+
+function loadProducts() {
+
+  const callbackName =
+    "riddhiProducts_" + Date.now();
+
+  window[callbackName] = function(data) {
+
+    products = data || [];
+
+    createFilters();
+
+    displayProducts();
+
+    delete window[callbackName];
+
+    const script =
+      document.getElementById(callbackName);
+
+    if (script) {
+      script.remove();
+    }
+
+  };
+
+  const script =
+    document.createElement("script");
+
+  script.id = callbackName;
+
+  script.src =
+    API_URL +
+    "?action=products&callback=" +
+    encodeURIComponent(callbackName);
+
+  script.onerror = function() {
+
+    delete window[callbackName];
+
+    document.getElementById("products").innerHTML =
+      '<div class="empty">Unable to load catalogue. Please refresh.</div>';
+
+  };
+
+  document.head.appendChild(script);
+
+}
+
+
+/* FILTERS */
+
+function createFilters() {
+
+  const filters =
+    document.getElementById("filters");
+
+  filters.innerHTML =
+    '<button class="filter active" onclick="filterSize(\'\',this)">All</button>';
+
+  SIZE_LIST.forEach(function(size) {
+
+    filters.innerHTML +=
+      '<button class="filter" onclick="filterSize(\'' +
+      size +
+      '\',this)">' +
+      size +
+      '</button>';
+
+  });
+
+}
+
+
+function filterSize(size, button) {
+
+  selectedSize = size;
+
+  document
+    .querySelectorAll(".filter")
+    .forEach(function(btn) {
+
+      btn.classList.remove("active");
+
+    });
+
+  button.classList.add("active");
+
+  displayProducts();
+
+}
+
+
+/* DISPLAY PRODUCTS */
+
+function displayProducts() {
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const list =
+    products.filter(function(product) {
+
+      const text =
+        (
+          product.code +
+          " " +
+          product.name +
+          " " +
+          product.colour +
+          " " +
+          product.category
+        ).toLowerCase();
+
+      const searchMatch =
+        !search ||
+        text.includes(search);
+
+      const sizeMatch =
+        !selectedSize ||
+        product.sizes[selectedSize];
+
+      return searchMatch && sizeMatch;
+
+    });
+
+
+  document.getElementById("count")
+    .innerText =
+      list.length +
+      " design" +
+      (list.length === 1 ? "" : "s");
+
+
+  const container =
+    document.getElementById("products");
+
+
+  if (!list.length) {
+
+    container.innerHTML =
+      '<div class="empty">' +
+      'No matching designs found.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list.map(function(product) {
+
+      return `
+
+      <div class="product">
+
+<img
+  class="product-image"
+  src="${product.image || ''}"
+>
+
+        <div class="product-info">
+
+          <div class="code">
+            ${product.code}
+          </div>
+
+          <div class="name">
+            ${product.name}
+          </div>
+
+          <div class="colour">
+            ${product.colour}
+          </div>
+
+
+<div class="sizes">
+
+  ${SIZE_LIST.map(function(size) {
+
+    return `
+      <div
+        class="size ${product.sizes[size] ? "available" : "sold"}"
+        ${product.sizes[size] ? `onclick="selectSize(this, '${size}')"` : ""}
+        data-size="${size}"
+      >
+        ${size}
+        ${product.sizes[size] ? "✓" : "×"}
+      </div>
+    `;
+
+  }).join("")}
+
+</div>
+
+
+<div class="size-warning" style="display:none;"></div>
+
+<a
+  class="whatsapp"
+  href="#"
+  onclick="return openWhatsApp(this);"
+>
+  WhatsApp
+</a>
+
+        </div>
+
+      </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* START */
+
+document.getElementById("brandLogo").src =
+  "https://drive.google.com/thumbnail?id=1Co-Uc_2qaDi2TMMFQ_kBdK3QfJrSYUbF&sz=w600";
+
+loadProducts();
+
+function selectSize(element, size) {
+
+  const sizesBox = element.closest(".sizes");
+
+  sizesBox.querySelectorAll(".size.available").forEach(function(item) {
+    item.classList.remove("selected");
+  });
+
+  element.classList.add("selected");
+
+  // Hide the warning as soon as a size is selected
+  const productCard = element.closest(".product");
+  const warning = productCard.querySelector(".size-warning");
+
+  if (warning) {
+    warning.style.display = "none";
+    warning.textContent = "";
+  }
+
+}
+
+
+function openWhatsApp(button) {
+
+  const productCard = button.closest(".product");
+
+  const selectedSize =
+    productCard.querySelector(".size.selected");
+
+  if (!selectedSize) {
+
+    const warning =
+      productCard.querySelector(".size-warning");
+
+    if (warning) {
+      warning.textContent =
+        "⚠️ Please select your size first, then click WhatsApp below.";
+
+      warning.style.display = "block";
+    }
+
+    return false;
+  }
+
+  const size = selectedSize.dataset.size;
+
+  const code =
+    productCard.querySelector(".code")?.innerText.trim() || "";
+
+  const name =
+    productCard.querySelector(".name")?.innerText.trim() || "";
+
+  const colour =
+    productCard.querySelector(".colour")?.innerText.trim() || "";
+
+  const message =
+    "Hi Ma'am, I'm interested in this product.\n\n" +
+    "📦 Product Code: " + code + "\n" +
+    "👗 Product: " + name + "\n" +
+    "🎨 Colour: " + colour + "\n" +
+    "📏 Size: " + size;
+
+  const whatsappURL =
+    "https://wa.me/918105836335?text=" +
+    encodeURIComponent(message);
+
+  // Let the browser handle the WhatsApp link normally
+  button.href = whatsappURL;
+
+  return true;
+}
+</script>
+
+</body>
+</html>
