@@ -452,7 +452,7 @@
   <div id="filters" class="filters"></div>
 
   <div id="count"
-       style="font-size:32px;color:#888;margin:7px 0">
+       style="font-size:8px;color:#888;margin:7px 0">
   </div>
 
   <div id="products"
@@ -683,7 +683,7 @@ function displayProducts() {
 </div>
 
 
-<div class="size-warning" style="display:none;"></div>
+<div class="size-warning" ="display:none;"></div>
 
 <a
   class="whatsapp"
@@ -725,7 +725,7 @@ function selectSize(element, size) {
   const warning = productCard.querySelector(".size-warning");
 
   if (warning) {
-    warning.style.display = "none";
+    warning..display = "none";
     warning.textContent = "";
   }
 
@@ -748,7 +748,7 @@ function openWhatsApp(button) {
       warning.textContent =
         "⚠️ Please select your size first, then click WhatsApp below.";
 
-      warning.style.display = "block";
+      warning..display = "block";
     }
 
     return false;
