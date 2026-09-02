@@ -508,7 +508,13 @@ function loadProducts() {
   const callbackName =
     "riddhiProducts_" + Date.now();
 
+  let finished = false;
+
   window[callbackName] = function(data) {
+
+    if (finished) return;
+
+    finished = true;
 
     products = data || [];
 
@@ -529,29 +535,39 @@ function loadProducts() {
 
   };
 
-  const script =
-    document.createElement("script");
+  function requestProducts() {
 
-  script.id = callbackName;
+    const script =
+      document.createElement("script");
 
-  script.src =
-    API_URL +
-    "?action=products&callback=" +
-    encodeURIComponent(callbackName);
+    script.id = callbackName;
 
-  script.onerror = function() {
+    script.src =
+      API_URL +
+      "?action=products&callback=" +
+      encodeURIComponent(callbackName) +
+      "&t=" +
+      Date.now();
 
-    delete window[callbackName];
+    script.onerror = function() {
 
-    document.getElementById("products").innerHTML =
-      '<div class="empty">Unable to load catalogue. Please refresh.</div>';
+      if (finished) return;
 
-  };
+      script.remove();
 
-  document.head.appendChild(script);
+      setTimeout(function() {
+        requestProducts();
+      }, 1000);
+
+    };
+
+    document.head.appendChild(script);
+
+  }
+
+  requestProducts();
 
 }
-
 
 /* FILTERS */
 
