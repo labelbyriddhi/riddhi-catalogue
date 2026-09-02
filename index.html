@@ -509,6 +509,7 @@ function loadProducts() {
     "riddhiProducts_" + Date.now();
 
   let finished = false;
+  let attempts = 0;
 
   window[callbackName] = function(data) {
 
@@ -524,6 +525,12 @@ function loadProducts() {
 
     openLinkedProduct();
 
+    cleanup();
+
+  };
+
+  function cleanup() {
+
     delete window[callbackName];
 
     const script =
@@ -533,9 +540,13 @@ function loadProducts() {
       script.remove();
     }
 
-  };
+  }
 
   function requestProducts() {
+
+    if (finished) return;
+
+    attempts++;
 
     const script =
       document.createElement("script");
@@ -549,15 +560,59 @@ function loadProducts() {
       "&t=" +
       Date.now();
 
-    script.onerror = function() {
+    let timeout = setTimeout(function() {
 
       if (finished) return;
 
       script.remove();
 
-      setTimeout(function() {
-        requestProducts();
-      }, 1000);
+      if (attempts < 2) {
+
+        setTimeout(function() {
+          requestProducts();
+        }, 500);
+
+      } else {
+
+        finished = true;
+
+        document.getElementById("products").innerHTML =
+          '<div class="empty">Catalogue is taking longer than usual. Please refresh.</div>';
+
+        cleanup();
+
+      }
+
+    }, 8000);
+
+    script.onload = function() {
+      clearTimeout(timeout);
+    };
+
+    script.onerror = function() {
+
+      clearTimeout(timeout);
+
+      if (finished) return;
+
+      script.remove();
+
+      if (attempts < 2) {
+
+        setTimeout(function() {
+          requestProducts();
+        }, 500);
+
+      } else {
+
+        finished = true;
+
+        document.getElementById("products").innerHTML =
+          '<div class="empty">Unable to load catalogue. Please refresh.</div>';
+
+        cleanup();
+
+      }
 
     };
 
