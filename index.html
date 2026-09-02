@@ -516,6 +516,8 @@ function loadProducts() {
 
     displayProducts();
 
+    openLinkedProduct();
+
     delete window[callbackName];
 
     const script =
@@ -729,6 +731,42 @@ document.getElementById("brandLogo").src =
 
 loadProducts();
 
+// Open and highlight a specific product from a WhatsApp link
+function openLinkedProduct() {
+
+  const params = new URLSearchParams(window.location.search);
+  const productCode = params.get("product");
+
+  if (!productCode) return;
+
+  const products = document.querySelectorAll(".product");
+
+  products.forEach(function(product) {
+
+    const code =
+      product.querySelector(".code")?.innerText.trim() || "";
+
+    if (code.toLowerCase() === productCode.toLowerCase()) {
+
+      // Highlight the product
+      product.style.outline = "4px solid #16834b";
+      product.style.outlineOffset = "4px";
+      product.style.borderRadius = "10px";
+
+      // Bring the product into view
+      setTimeout(function() {
+        product.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }, 300);
+
+    }
+
+  });
+
+}  
+  
 function selectSize(element, size) {
 
   const sizesBox = element.closest(".sizes");
