@@ -784,18 +784,26 @@ function openWhatsApp(button) {
   const colour =
     productCard.querySelector(".colour")?.innerText.trim() || "";
 
+  // Link directly to this product
+  const productLink =
+    window.location.origin +
+    window.location.pathname +
+    "?product=" +
+    encodeURIComponent(code);
+
   const message =
     "Hi Ma'am, I'm interested in this product.\n\n" +
     "📦 Product Code: " + code + "\n" +
     "👗 Product: " + name + "\n" +
     "🎨 Colour: " + colour + "\n" +
-    "📏 Size: " + size;
+    "📏 Size: " + size + "\n\n" +
+    "🔗 View Product:\n" +
+    productLink;
 
   const whatsappURL =
     "https://wa.me/918105836335?text=" +
     encodeURIComponent(message);
 
-  // Let the browser handle the WhatsApp link normally
   button.href = whatsappURL;
 
   return true;
