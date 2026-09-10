@@ -822,18 +822,30 @@ function filterCategory(category, button) {
   displayProducts();
 
 
-  /* GO TO FIRST PRODUCT */
+  /* GO TO FIRST PRODUCT BELOW STICKY BAR */
 
   setTimeout(function() {
 
     const firstProduct =
       document.querySelector(".product");
 
+    const categoryBar =
+      document.querySelector(".category-sticky");
+
     if (firstProduct) {
 
-      firstProduct.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+      const stickyHeight =
+        categoryBar ? categoryBar.offsetHeight : 0;
+
+      const productPosition =
+        firstProduct.getBoundingClientRect().top +
+        window.pageYOffset;
+
+      const extraSpace = 10;
+
+      window.scrollTo({
+        top: productPosition - stickyHeight - extraSpace,
+        behavior: "smooth"
       });
 
     }
@@ -841,7 +853,7 @@ function filterCategory(category, button) {
   }, 50);
 
 }
-
+  
 /* MIX ALL PRODUCTS */
 
 function mixProductsByCategory(list) {
