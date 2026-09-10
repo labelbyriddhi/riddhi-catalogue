@@ -667,6 +667,60 @@ function filterSize(size, button) {
 }
 
 
+/* MIX PRODUCTS BY CATEGORY */
+
+function mixProductsByCategory(list) {
+
+  const groups = {};
+
+  // Group products by category
+  list.forEach(function(product) {
+
+    const category =
+      product.category || "Other";
+
+    if (!groups[category]) {
+      groups[category] = [];
+    }
+
+    groups[category].push(product);
+
+  });
+
+
+  const categories =
+    Object.keys(groups);
+
+  const mixed = [];
+
+  let productsRemaining = true;
+
+
+  while (productsRemaining) {
+
+    productsRemaining = false;
+
+    categories.forEach(function(category) {
+
+      if (groups[category].length > 0) {
+
+        mixed.push(
+          groups[category].shift()
+        );
+
+        productsRemaining = true;
+
+      }
+
+    });
+
+  }
+
+
+  return mixed;
+
+}
+  
 /* DISPLAY PRODUCTS */
 
 function displayProducts() {
@@ -704,32 +758,35 @@ function displayProducts() {
 
     });
 
-
-  document.getElementById("count")
-    .innerText =
-      list.length +
-      " design" +
-      (list.length === 1 ? "" : "s");
+const mixedList =
+  mixProductsByCategory(list);
 
 
-  const container =
-    document.getElementById("products");
+document.getElementById("count")
+  .innerText =
+    mixedList.length +
+    " design" +
+    (mixedList.length === 1 ? "" : "s");
 
 
-  if (!list.length) {
+const container =
+  document.getElementById("products");
 
-    container.innerHTML =
-      '<div class="empty">' +
-      'No matching designs found.' +
-      '</div>';
 
-    return;
-
-  }
-
+if (!mixedList.length) {
 
   container.innerHTML =
-    list.map(function(product) {
+    '<div class="empty">' +
+    'No matching designs found.' +
+    '</div>';
+
+  return;
+
+}
+
+
+container.innerHTML =
+  mixedList.map(function(product) {
 
       return `
 
