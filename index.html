@@ -812,45 +812,59 @@ function filterCategory(category, button) {
 
   selectedCategory = category;
 
-  document.querySelectorAll(".category-filter")
+
+  document
+    .querySelectorAll(".category-filter")
     .forEach(function(btn) {
+
       btn.classList.remove("active");
+
     });
 
+
   button.classList.add("active");
+
+
+  /* UPDATE PRODUCTS */
 
   displayProducts();
 
 
-  /* GO TO FIRST PRODUCT BELOW STICKY BAR */
+  /* GO TO THE START OF THE NEW CATEGORY */
 
   setTimeout(function() {
 
-    const firstProduct =
-      document.querySelector(".product");
+    const productsContainer =
+      document.getElementById("products");
 
     const categoryBar =
       document.querySelector(".category-sticky");
 
-    if (firstProduct) {
 
-      const stickyHeight =
-        categoryBar ? categoryBar.offsetHeight : 0;
+    if (!productsContainer) return;
 
-      const productPosition =
-        firstProduct.getBoundingClientRect().top +
-        window.pageYOffset;
 
-      const extraSpace = 10;
+    const categoryHeight =
+      categoryBar && categoryBar.classList.contains("fixed")
+        ? categoryBar.offsetHeight
+        : 0;
 
-      window.scrollTo({
-        top: productPosition - stickyHeight - extraSpace,
-        behavior: "smooth"
-      });
 
-    }
+    const position =
+      productsContainer.getBoundingClientRect().top +
+      window.scrollY;
 
-  }, 50);
+
+    window.scrollTo({
+
+      top: position - categoryHeight - 10,
+
+      behavior: "smooth"
+
+    });
+
+
+  }, 100);
 
 }
   
