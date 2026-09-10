@@ -295,15 +295,28 @@
 /* STICKY OUTER WRAPPER */
 
 .category-sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
+  width: 100%;
+  background: #f7f5f2;
+  padding: 8px 0;
+  box-sizing: border-box;
+}
 
-  z-index: 9999;
+.category-sticky.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  z-index: 99999;
 
   background: #f7f5f2;
 
-  padding: 8px 0;
+  padding: 8px;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
 }
 
 
@@ -311,7 +324,6 @@
 
 .category-filters {
   display: flex;
-
   gap: 6px;
 
   overflow-x: auto;
@@ -320,7 +332,6 @@
   -webkit-overflow-scrolling: touch;
 
   width: 100%;
-
   box-sizing: border-box;
 
   padding: 2px 8px;
@@ -540,7 +551,10 @@
     oninput="displayProducts()"
   >
 
+  <div id="categoryPlaceholder"></div>
+  
   <!-- CATEGORY FILTER STICKY WRAPPER -->
+
 <div class="category-sticky">
 
   <div id="categoryFilters" class="category-filters">
@@ -1105,6 +1119,65 @@ function openWhatsApp(button) {
 
   return true;
 }
+
+  /* FIXED CATEGORY FILTER ON SCROLL */
+
+(function () {
+
+  const categoryBar =
+    document.querySelector(".category-sticky");
+
+  const placeholder =
+    document.getElementById("categoryPlaceholder");
+
+  if (!categoryBar || !placeholder) return;
+
+
+  function updateCategoryBar() {
+
+    const placeholderTop =
+      placeholder.getBoundingClientRect().top;
+
+
+    if (placeholderTop <= 0) {
+
+      if (!categoryBar.classList.contains("fixed")) {
+
+        placeholder.style.height =
+          categoryBar.offsetHeight + "px";
+
+        categoryBar.classList.add("fixed");
+
+      }
+
+    } else {
+
+      if (categoryBar.classList.contains("fixed")) {
+
+        categoryBar.classList.remove("fixed");
+
+        placeholder.style.height = "0px";
+
+      }
+
+    }
+
+  }
+
+
+  window.addEventListener(
+    "scroll",
+    updateCategoryBar,
+    { passive: true }
+  );
+
+
+  window.addEventListener(
+    "resize",
+    updateCategoryBar
+  );
+
+})();
 
 </script>
 
