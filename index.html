@@ -667,55 +667,26 @@ function filterSize(size, button) {
 }
 
 
-/* MIX PRODUCTS BY CATEGORY */
+/* MIX ALL PRODUCTS */
 
 function mixProductsByCategory(list) {
 
-  const groups = {};
+  const mixed = [...list];
 
-  // Group products by category
-  list.forEach(function(product) {
+  // Shuffle products randomly
+  for (let i = mixed.length - 1; i > 0; i--) {
 
-    const category =
-      product.category || "Other";
+    const j = Math.floor(
+      Math.random() * (i + 1)
+    );
 
-    if (!groups[category]) {
-      groups[category] = [];
-    }
+    const temp = mixed[i];
 
-    groups[category].push(product);
+    mixed[i] = mixed[j];
 
-  });
-
-
-  const categories =
-    Object.keys(groups);
-
-  const mixed = [];
-
-  let productsRemaining = true;
-
-
-  while (productsRemaining) {
-
-    productsRemaining = false;
-
-    categories.forEach(function(category) {
-
-      if (groups[category].length > 0) {
-
-        mixed.push(
-          groups[category].shift()
-        );
-
-        productsRemaining = true;
-
-      }
-
-    });
+    mixed[j] = temp;
 
   }
-
 
   return mixed;
 
