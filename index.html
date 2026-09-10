@@ -287,6 +287,65 @@
       font-size: 11px;
     }
 
+
+/* =========================
+   CATEGORY FILTER
+========================= */
+
+.category-filters {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+
+  display: flex;
+  gap: 6px;
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 10px 8px;
+  margin: 8px 0;
+
+  background: #f7f5f2;
+
+  white-space: nowrap;
+}
+
+
+.category-filter {
+
+  flex: 0 0 auto;
+
+  border: 1px solid #ddd;
+
+  background: white;
+
+  border-radius: 8px;
+
+  padding: 10px 14px;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+}
+
+
+.category-filter.active {
+
+  background: #16834b;
+
+  color: white;
+
+  border-color: #16834b;
+
+}
+    
 @media screen and (max-width: 1000px) {
 
   /* ===== FINAL MOBILE SIZE ===== */
@@ -468,7 +527,56 @@
     oninput="displayProducts()"
   >
 
-  <div id="filters" class="filters"></div>
+  <!-- CATEGORY FILTER -->
+<div id="categoryFilters" class="category-filters">
+
+  <button
+    class="category-filter active"
+    onclick="filterCategory('', this)"
+  >
+    ALL
+  </button>
+
+  <button
+    class="category-filter"
+    onclick="filterCategory('Three Piece Set', this)"
+  >
+    3 PIECE
+  </button>
+
+  <button
+    class="category-filter"
+    onclick="filterCategory('Two Piece Set', this)"
+  >
+    2 PIECE
+  </button>
+
+  <button
+    class="category-filter"
+    onclick="filterCategory('Tops', this)"
+  >
+    TOPS
+  </button>
+
+  <button
+    class="category-filter"
+    onclick="filterCategory('Short Kurta', this)"
+  >
+    SHORT KURTA
+  </button>
+
+  <button
+    class="category-filter"
+    onclick="filterCategory('Co-ord Set', this)"
+  >
+    CO-ORD
+  </button>
+
+</div>
+
+
+<!-- SIZE FILTER -->
+<div id="filters" class="filters"></div>
 
   <div id="count"
        style="font-size:16px;color:#888;margin:7px 0">
@@ -494,6 +602,7 @@ const SIZE_LIST = [
 
 let products = [];
 let selectedSize = "";
+let selectedCategory = "";
 let adminPin = "";
 let editingId = "";
 let uploadedPhotoUrl = "";
@@ -667,6 +776,29 @@ function filterSize(size, button) {
 }
 
 
+  /* CATEGORY FILTER */
+
+function filterCategory(category, button) {
+
+  selectedCategory = category;
+
+
+  document
+    .querySelectorAll(".category-filter")
+    .forEach(function(btn) {
+
+      btn.classList.remove("active");
+
+    });
+
+
+  button.classList.add("active");
+
+
+  displayProducts();
+
+}
+
 /* MIX ALL PRODUCTS */
 
 function mixProductsByCategory(list) {
@@ -721,16 +853,28 @@ function displayProducts() {
         !search ||
         text.includes(search);
 
-      const sizeMatch =
-        !selectedSize ||
-        product.sizes[selectedSize];
+const sizeMatch =
+  !selectedSize ||
+  product.sizes[selectedSize];
 
-      return searchMatch && sizeMatch;
+
+const categoryMatch =
+  !selectedCategory ||
+  product.category === selectedCategory;
+
+
+return (
+  searchMatch &&
+  sizeMatch &&
+  categoryMatch
+);
 
     });
 
 const mixedList =
-  mixProductsByCategory(list);
+  selectedCategory
+    ? list
+    : mixProductsByCategory(list);
 
 
 document.getElementById("count")
