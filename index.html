@@ -995,6 +995,19 @@ container.innerHTML =
             ${product.colour}
           </div>
 
+          
+<div class="price">
+  <strong>₹${product.sellingPrice || 0}</strong>
+
+  ${
+    product.mrp > product.sellingPrice
+      ? `<span style="text-decoration: line-through; color: #888; margin-left: 8px;">₹${product.mrp}</span>
+         <span style="color: #16834b; margin-left: 8px;">${product.discount}% OFF</span>`
+      : ""
+  }
+</div>
+
+
 
 <div class="sizes">
 
