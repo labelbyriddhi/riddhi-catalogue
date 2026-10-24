@@ -1148,6 +1148,9 @@ function openWhatsApp(button) {
   const colour =
     productCard.querySelector(".colour")?.innerText.trim() || "";
 
+  const price =
+    productCard.querySelector(".price strong")?.innerText.trim() || "Price unavailable";
+
   // Link directly to this product
   const productLink =
     window.location.origin +
@@ -1160,6 +1163,7 @@ function openWhatsApp(button) {
     "📦 Product Code: " + code + "\n" +
     "👗 Product: " + name + "\n" +
     "🎨 Colour: " + colour + "\n" +
+    "💰 Selling Price: " + price + "\n" +
     "📏 Size: " + size + "\n\n" +
     "🔗 View Product:\n" +
     productLink;
